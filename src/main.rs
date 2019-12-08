@@ -1,4 +1,5 @@
 mod day01;
+mod day02;
 
 fn testdata(path: &str) -> String {
     use std::fs::File;
@@ -10,7 +11,7 @@ fn testdata(path: &str) -> String {
 }
 
 fn main() {
-    let days = [day01];
+    let days = [day01, day02];
 
     if std::env::args().count() > 2 {
         println!("Useage: {} [day number]", std::env::args().nth(0).unwrap());
@@ -35,3 +36,9 @@ fn day01() {
     println!("Day 1 result a = {}", day01::process_a(testdata("testdata/day01/a.txt").as_ref()));
     println!("Day 1 result b = {}", day01::process_b(testdata("testdata/day01/b.txt").as_ref()));
 }
+
+fn day02() {
+    println!("Day 2 result a = {}", day02::process_a(testdata("testdata/day02/input.txt").as_ref()));
+    println!("Day 2 result b = {}", day02::process_b(testdata("testdata/day02/input.txt").as_ref()));
+}
+
