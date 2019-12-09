@@ -1,11 +1,4 @@
-mod day01;
-mod day02;
-mod day03;
-mod day04;
-mod day05;
-mod day06;
-mod day07;
-mod day08;
+use adventofcode_2019::*;
 
 fn testdata(path: &str) -> String {
     use std::fs::File;
@@ -17,7 +10,7 @@ fn testdata(path: &str) -> String {
 }
 
 fn main() {
-    let days = [day01, day02, day03, day04, day05, day06, day07, day08];
+    let days = [day01, day02, day03, day04, day05, day06, day07, day08, day09];
 
     if std::env::args().count() > 2 {
         println!("Useage: {} [day number]", std::env::args().nth(0).unwrap());
@@ -76,4 +69,9 @@ fn day07() {
 fn day08() {
     println!("Day 8 result a = {}", day08::process_a(testdata("testdata/day08/input.txt").as_ref(), 25, 6));
     println!("Day 8 result b = {}", day08::process_b(testdata("testdata/day08/input.txt").as_ref(), 25, 6));
+}
+
+fn day09() {
+    println!("Day 9 result a = {}", day09::process(testdata("testdata/day09/input.txt").as_ref(), 1));
+    println!("Day 9 result a = {}", day09::process(testdata("testdata/day09/input.txt").as_ref(), 2));
 }

@@ -1,5 +1,6 @@
 use permute;
-use std::collections::VecDeque;
+
+use super::intcode_computer::*;
 
 pub fn process_a(text: &str) -> isize {
     let amplifier_count = 5;
@@ -29,7 +30,7 @@ pub fn process_a(text: &str) -> isize {
                                                 amplifiers[amplifier_count - 1].pop_output()
                                            })
                                           .max()
-                                            .unwrap()
+                                          .unwrap()
 }
 
 pub fn process_b(text: &str) -> isize {
@@ -50,7 +51,7 @@ pub fn process_b(text: &str) -> isize {
                                                     }
 
                                                     // Cycle through each of the amplifiers until the last one is halted
-                                                    while !amplifiers[amplifier_count - 1].is_halted {
+                                                    while !amplifiers[amplifier_count - 1].is_halted() {
 
                                                         // And then asks for the input signal
                                                         amplifiers[i].push_input(signal);
@@ -60,7 +61,9 @@ pub fn process_b(text: &str) -> isize {
                                                         if amplifiers[i].has_output() {
                                                             signal = amplifiers[i].pop_output();
                                                         } else {
-                                                            // println!("Amplifier {} had no output for this iteration!", i);
+                                                            if !amplifiers[i].is_halted() {
+                                                                println!("Amplifier {} had no output for this iteration!", i);
+                                                            }
                                                         }
 
                                                         i = (i+1)%amplifier_count;
@@ -70,131 +73,6 @@ pub fn process_b(text: &str) -> isize {
                                                  })
                                           .max()
                                           .unwrap()
-}
-
-#[derive(Debug, Clone)]
-struct IntCodeComputer {
-    is_halted: bool,
-    p: usize,
-    memory: Vec<isize>,
-    input: VecDeque<isize>,
-    output: VecDeque<isize>
-}
-
-#[derive(PartialEq)]
-enum ReturnEvent {
-    OutputEvent,
-    HaltEvent
-}
-
-impl IntCodeComputer {
-    fn new(text: &str) -> IntCodeComputer {
-        IntCodeComputer {
-            is_halted: false,
-            p: 0,
-            memory: {
-                text.split(',')
-                    .filter(|item| item.len() > 0)
-                    .map(|item| item.parse::<isize>().unwrap())
-                    .collect::<Vec<isize>>()
-            },
-            input: VecDeque::new(),
-            output: VecDeque::new()
-        }
-    }
-
-    fn push_input(&mut self, value: isize) {
-        self.input.push_back(value);
-    }
-
-    fn has_output(&mut self) -> bool {
-        self.output.len() > 0
-    }
-
-    fn pop_output(&mut self) -> isize {
-        self.output.pop_front().unwrap()
-    }
-
-    fn process(&mut self, return_event: ReturnEvent) -> bool {
-        if self.is_halted {
-            return self.is_halted;
-        }
-
-        while self.p < self.memory.len() {
-            let parameters = self.memory[self.p]/100;
-            let opcode = self.memory[self.p]%100;
-            let memory = &mut self.memory;
-            let p = self.p;
-    
-            let parameter = |memory: &Vec<isize>, base, position| {
-                let mode = (parameters/((10 as isize).pow(position as u32 - 1)))%10;
-                return  if mode == 0 { memory[(memory[base + position] as usize)] } else { memory[base + position] };
-            };
-    
-            // Parameters that an instruction writes to will never be in immediate mode.
-            let write_location = match opcode {
-                1 | 2 | 7 | 8 => memory[p+3] as usize,
-                3             => memory[p+1] as usize,
-                _             => 0
-            };
-    
-            match opcode {
-                1 => {
-                    memory[write_location] = parameter(&memory, p, 1) + parameter(&memory, p, 2);
-                    self.p += 4;
-                },
-                2 => {
-                    memory[write_location] = parameter(&memory, p, 1) * parameter(&memory, p, 2);
-                    self.p +=4;
-                },
-                3 => {
-                    memory[write_location] = self.input.pop_front().unwrap();
-                    self.p += 2;
-                },
-                4 => {
-                    self.output.push_back(parameter(&memory, p, 1));
-                    self.p += 2;
-
-                    if return_event == ReturnEvent::OutputEvent {
-                        break;
-                    }
-                },
-                5 => {
-                    if parameter(&memory, p, 1) != 0 {
-                        self.p = parameter(&memory, p, 2) as usize;
-                    }
-                    else {
-                        self.p += 3;
-                    }
-                },
-                6 => {
-                    if parameter(&memory, p, 1) == 0 {
-                        self.p = parameter(&memory, p, 2) as usize;
-                    }
-                    else {
-                        self.p += 3;
-                    }
-                },
-                7 => {
-                    memory[write_location] = (parameter(&memory, p, 1) < parameter(&memory, p, 2)) as isize;
-                    self.p += 4;
-                },
-                8 => {
-                    memory[write_location] = (parameter(&memory, p, 1) == parameter(&memory, p, 2)) as isize;
-                    self.p += 4;
-                },
-                _ => {
-                    if opcode != 99 {
-                        println!("Invalid operation!: {} ", opcode);
-                    }
-                    self.is_halted = true;
-                    break
-                }
-            };
-        }
-    
-        return self.is_halted;
-    }
 }
 
 #[cfg(test)]
