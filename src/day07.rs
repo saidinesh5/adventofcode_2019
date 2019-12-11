@@ -5,7 +5,7 @@ use super::intcode_computer::*;
 pub fn process_a(text: &str) -> isize {
     let amplifier_count = 5;
     let amplifiers = (0..amplifier_count).map(#[allow(unused)]
-                                              |i| IntCodeComputer::new(text))
+                                              |i| IntCodeComputer::from(text))
                                          .collect::<Vec<IntCodeComputer>>();
 
     permute::permutations_of(&[0,1,2,3,4]).map(|permutation| {
@@ -36,7 +36,7 @@ pub fn process_a(text: &str) -> isize {
 pub fn process_b(text: &str) -> isize {
     let amplifier_count = 5;
     let original_amplifiers = (0..amplifier_count).map(#[allow(unused)]
-                                                      |i| IntCodeComputer::new(text))
+                                                      |i| IntCodeComputer::from(text))
                                                   .collect::<Vec<IntCodeComputer>>();
 
     permute::permutations_of(&[5,6,7,8,9]).map(|permutation| {
@@ -55,7 +55,7 @@ pub fn process_b(text: &str) -> isize {
 
                                                         // And then asks for the input signal
                                                         amplifiers[i].push_input(signal);
-    
+
                                                         amplifiers[i].process(ReturnEvent::OutputEvent);
 
                                                         if amplifiers[i].has_output() {

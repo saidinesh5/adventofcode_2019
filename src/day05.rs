@@ -1,7 +1,7 @@
 use super::intcode_computer::*;
 
 pub fn process_a(text: &str) -> isize {
-    let mut computer = IntCodeComputer::new(text);
+    let mut computer = IntCodeComputer::from(text);
     computer.push_input(1);
     computer.process(ReturnEvent::HaltEvent);
 
@@ -13,7 +13,7 @@ pub fn process_a(text: &str) -> isize {
 }
 
 pub fn process_b(text: &str) -> isize {
-    let mut computer = IntCodeComputer::new(text);
+    let mut computer = IntCodeComputer::from(text);
     computer.push_input(5);
     computer.process(ReturnEvent::HaltEvent);
     let output =  computer.pop_all_output();
