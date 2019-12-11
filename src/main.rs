@@ -10,7 +10,7 @@ fn testdata(path: &str) -> String {
 }
 
 fn main() {
-    let days = [day01, day02, day03, day04, day05, day06, day07, day08, day09];
+    let days = [day01, day02, day03, day04, day05, day06, day07, day08, day09, day10];
 
     if std::env::args().count() > 2 {
         println!("Useage: {} [day number]", std::env::args().nth(0).unwrap());
@@ -74,4 +74,11 @@ fn day08() {
 fn day09() {
     println!("Day 9 result a = {}", day09::process(testdata("testdata/day09/input.txt").as_ref(), 1));
     println!("Day 9 result a = {}", day09::process(testdata("testdata/day09/input.txt").as_ref(), 2));
+}
+
+fn day10() {
+    println!("Day 10 result a = {}", day10::process_a(testdata("testdata/day10/input.txt").as_ref()));
+    // Asteroid at (37, 25) has the maximum visibility of 309 asteroids, as per a
+    // So directly inputting those coordinates, to reduce the burden on process_b
+    println!("Day 10 result a = {}", day10::process_b(testdata("testdata/day10/input.txt").as_ref(), (37, 25), 199));
 }
