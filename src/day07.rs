@@ -56,7 +56,7 @@ pub fn process_b(text: &str) -> isize {
                                                         // And then asks for the input signal
                                                         amplifiers[i].push_input(signal);
 
-                                                        amplifiers[i].process(ReturnEvent::OutputEvent);
+                                                        amplifiers[i].process(ReturnEvent::OutputReadyEvent);
 
                                                         if amplifiers[i].has_output() {
                                                             signal = amplifiers[i].pop_output();

@@ -48,14 +48,14 @@ fn run_robot(instructions: &str, initial_input: isize) -> HashMap<Pair, Color> {
         // Tell the computer what the current panel is colored as
         computer.push_input(*current_color);
 
-        computer.process(ReturnEvent::OutputEvent);
+        computer.process(ReturnEvent::OutputReadyEvent);
 
         // Paint the current panel with the color the computer tells you to
         if computer.has_output() {
             panels.insert(current_location, computer.pop_output());
         }
 
-        computer.process(ReturnEvent::OutputEvent);
+        computer.process(ReturnEvent::OutputReadyEvent);
 
         if computer.has_output() {
             match computer.pop_output() {

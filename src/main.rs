@@ -11,7 +11,7 @@ fn testdata(path: &str) -> String {
 
 fn main() {
     let days = [day01, day02, day03, day04, day05, day06, day07, day08, day09, day10,
-                day11, day12];
+                day11, day12, day13];
 
     if std::env::args().count() > 2 {
         println!("Useage: {} [day number]", std::env::args().nth(0).unwrap());
@@ -92,4 +92,9 @@ fn day11() {
 fn day12() {
     println!("Day 12 result a = {}", day12::process_a(testdata("testdata/day12/input.txt").as_ref(), 1000));
     println!("Day 12 result b = {}", day12::process_b(testdata("testdata/day12/input.txt").as_ref()));
+}
+
+fn day13() {
+    println!("Day 13 result a = {}", day13::process_a(testdata("testdata/day13/input.txt").as_ref()));
+    println!("Day 13 result b = {}", day13::process_b(testdata("testdata/day13/input.txt").as_ref()));
 }

@@ -13,7 +13,8 @@ pub struct IntCodeComputer {
 
 #[derive(PartialEq)]
 pub enum ReturnEvent {
-    OutputEvent,
+    InputNeededEvent,
+    OutputReadyEvent,
     HaltEvent
 }
 
@@ -27,6 +28,11 @@ impl IntCodeComputer {
             input: VecDeque::new(),
             output: VecDeque::new()
         }
+    }
+
+    pub fn set_memory_value(&mut self, index: usize, value: isize) {
+        self.init_fetch(index);
+        self.memory[index] = value;
     }
 
     pub fn push_input(&mut self, value: isize) {
@@ -109,6 +115,10 @@ impl IntCodeComputer {
                     self.p +=4;
                 },
                 3 => {
+                    if return_event == ReturnEvent::InputNeededEvent && self.input.is_empty() {
+                        break;
+                    }
+
                     self.memory[write_location] = self.input.pop_front().unwrap();
                     self.p += 2;
                 },
@@ -117,7 +127,7 @@ impl IntCodeComputer {
                     self.output.push_back(output_parameter);
                     self.p += 2;
 
-                    if return_event == ReturnEvent::OutputEvent {
+                    if return_event == ReturnEvent::OutputReadyEvent {
                         break;
                     }
                 },
