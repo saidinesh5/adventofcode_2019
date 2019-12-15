@@ -1,6 +1,9 @@
 // Thank you stackoverflow for saving me (,after burning) so much time on this one
 // https://stackoverflow.com/questions/30677258/how-do-i-import-from-a-sibling-module
 
+#[macro_use]
+extern crate lazy_static;
+
 #[path = "common/intcode_computer.rs"]
 pub mod intcode_computer;
 
@@ -17,3 +20,4 @@ pub mod day10;
 pub mod day11;
 pub mod day12;
 pub mod day13;
+pub mod day14;
