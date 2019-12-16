@@ -20,7 +20,8 @@ pub fn process_b(text: &str) -> u64 {
         let ore_required = get_ore_required(&elements, &mut HashMap::new(), &String::from("FUEL"), fuel_to_produce);
 
         if ore_required == available_ore {
-            break
+            maximum_fuel_produced = fuel_to_produce;
+            break;
         } else if ore_required > available_ore {
             maximum_fuel = fuel_to_produce - 1;
         } else {
